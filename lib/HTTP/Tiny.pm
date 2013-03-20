@@ -1097,9 +1097,11 @@ sub _find_CA_file {
 sub _ssl_args {
     my ($self, $host) = @_;
 
-    my %ssl_args = (
-        SSL_hostname        => $host,  # SNI
-    );
+    my %ssl_args = ();
+
+    if ( IO::Socket::SSL::can_client_sni() ) {
+        $ssl_args{SSL_hostname}        = $host,  # SNI if OpenSSL supports it
+    }
 
     if ($self->{verify_SSL}) {
         $ssl_args{SSL_verifycn_scheme}  = 'http'; # enable CN validation
