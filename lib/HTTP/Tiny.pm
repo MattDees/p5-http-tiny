@@ -1099,8 +1099,8 @@ sub _ssl_args {
 
     my %ssl_args = ();
 
-    if ( IO::Socket::SSL::can_client_sni() ) {
-        $ssl_args{SSL_hostname}        = $host,  # SNI if OpenSSL supports it
+    if ( IO::Socket::SSL->can('can_client_sni') and IO::Socket::SSL::can_client_sni() ) {
+        $ssl_args{SSL_hostname}        = $host;  # SNI if OpenSSL supports it
     }
 
     if ($self->{verify_SSL}) {
